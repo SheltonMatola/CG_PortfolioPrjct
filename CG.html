@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelton's Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Custom styles for the Inter font and smooth scrolling */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a202c; /* Dark background for the track */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568; /* Greyish thumb */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; /* Lighter grey on hover */
+        }
+        /* Transition for the header for smooth show/hide */
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+        .header-visible {
+            transform: translateY(0);
+        }
+        .header-transition {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* ############################################################## */
+        /* Custom styles for Project Card 1 Carousel */
+        .carousel-container {
+            /* Already defined w-full h-48 overflow-hidden relative in HTML, but reinforcing */
+        }
+
+        .carousel-track {
+            /* Already defined flex transition-transform duration-500 ease-in-out in HTML, but reinforcing */
+        }
+
+        .project-image {
+            /* Already defined w-full h-48 object-cover flex-shrink-0 in HTML, but reinforcing */
+        }
+
+        /* Styles for the maximize overlay on hover */
+        .project-maximizer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(17, 24, 39, 0.95); /* bg-gray-900 with opacity-95 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            z-index: 30; /* Ensure it's on top */
+        }
+
+        .group:hover .project-maximizer {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .project-maximizer img {
+            max-width: 90%; /* Limit the size of the maximized image */
+            max-height: 90%;
+            object-fit: contain; /* Ensure the whole image is visible, might leave space */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* Nice shadow for the maximized image */
+            border-radius: 0.75rem; /* rounded-xl */
+        }
+
+        /* Basic styling for dots */
+        .carousel-dots .dot {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .carousel-dots .dot.active {
+            background-color: #3b82f6; /* blue-500 */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+<!-- Header Section -->
+<header id="main-header" class="bg-gray-800 shadow-lg py-4 px-6 fixed w-full z-10 top-0 rounded-b-lg header-transition header-visible">
+    <nav class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-2xl font-bold text-blue-400 hover:text-blue-300 transition duration-300">SM</a>
+        <ul class="flex space-x-6 items-center">
+            <li><a href="#home" class="text-gray-300 hover:text-blue-400 transition duration-300 px-3 py-2 rounded-md" data-lang-key="navHome">Home</a></li>
+            <li><a href="#about" class="text-gray-300 hover:text-blue-400 transition duration-300 px-3 py-2 rounded-md" data-lang-key="navAbout">About</a></li>
+            <li><a href="#highlights" class="text-gray-300 hover:text-blue-400 transition duration-300 px-3 py-2 rounded-md" data-lang-key="navHighlights">Highlights</a></li>
+            <li><a href="#projects" class="text-gray-300 hover:text-blue-400 transition duration-300 px-3 py-2 rounded-md" data-lang-key="navProjects">Projects</a></li>
+            <li><a href="#contact" class="text-gray-300 hover:text-blue-400 transition duration-300 px-3 py-2 rounded-md" data-lang-key="navContact">Contact</a></li>
+            <li class="ml-4">
+                <!-- Smaller buttons -->
+                <button id="lang-en" class="text-gray-300 hover:text-blue-400 transition duration-300 px-2 py-1 text-sm rounded-md border border-gray-600 hover:border-blue-400">EN</button>
+            </li>
+            <li>
+                <!-- Smaller buttons -->
+                <button id="lang-pt" class="text-gray-300 hover:text-blue-400 transition duration-300 px-2 py-1 text-sm rounded-md border border-gray-600 hover:border-blue-400">PT</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Hero Section -->
+<section id="home" class="relative h-screen flex items-center justify-center text-center bg-cover bg-center" style="background-image: url('https://i.imgur.com/rnhC7RD.jpeg');">
+    <div class="absolute inset-0 bg-black opacity-70"></div>
+    <div class="z-10 p-8 rounded-xl bg-gray-800 bg-opacity-80 shadow-2xl max-w-3xl mx-auto">
+        <img src="IMG_20221112_175702_895.jpg" alt="Shelton's Photo" class="rounded-full w-36 h-36 mx-auto mb-6 border-4 border-blue-400 shadow-lg">
+        <h1 class="text-5xl font-extrabold text-white mb-4 leading-tight" data-lang-key="heroTitle">Hey there! I'm <span class="text-blue-400">Shelton</span>.</h1>
+        <p class="text-xl text-gray-300 mb-8" data-lang-key="heroSubtitle">Computer Science student. Aspiring developer and professional & computer technician. Always learning by observing and experimenting. Because it is easier to learn by practical methods.</p>
+        <a href="#projects" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105" data-lang-key="heroButton">See My Work</a>
+    </div>
+</section>
+
+<!-- About Me Section -->
+<section id="about" class="py-20 px-6 bg-gray-800">
+    <div class="container mx-auto max-w-4xl">
+        <h2 class="text-4xl font-bold text-center text-blue-400 mb-12" data-lang-key="aboutTitle">About Computer Graphics</h2>
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-12">
+            <div class="md:w-1/2 text-lg text-gray-300 leading-relaxed">
+                <p class="mb-6" data-lang-key="aboutP1">
+                    It would be relatively understandable and easy to learn. I had some difficulties regarding the topic of programming
+                    in the C++ language, but nothing that could not be overcome with the help of the programming and search engines.
+                </p>
+                <p class="mb-6" data-lang-key="aboutP2">
+                    I'm happy to have learned Blender, it was a very interesting and innovative concept.
+                    The modeling of 3D objects, application of colors and textures..
+                    In a way, a different way of making use of computational resources.
+                </p>
+                <p data-lang-key="aboutP3">
+                    Some group and individual work were carried out, both related to the two major topics in the CG course.
+                    From the works, more specifically, creation of city in blender, rooms, complementary objects,
+                    creation of universes and geometric shapes (in C++).
+                </p>
+            </div>
+            <div class="md:w-1/2">
+                <img src="andras-vas-Bd7gNnWJBkU-unsplash.jpg" alt="About Kevin" class="rounded-xl shadow-xl border-2 border-gray-700">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Highlights Section -->
+<section id="highlights" class="py-20 px-6 bg-gray-900">
+    <div class="container mx-auto max-w-4xl">
+        <h2 class="text-4xl font-bold text-center text-blue-400 mb-12" data-lang-key="highlightsTitle">My Progress & Highlights</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <!-- Highlight 1: Blender -->
+            <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                <h3 class="text-2xl font-semibold text-white mb-4" data-lang-key="blenderTitle">Blender Proficiency</h3>
+                <p class="text-gray-300 mb-4" data-lang-key="blenderDesc">
+                    Developing skills in 3D modeling, animation, and rendering using Blender.
+                </p>
+                <div class="w-full bg-gray-700 rounded-full h-4 mb-2">
+                    <div class="bg-orange-500 h-4 rounded-full" style="width: 70%;"></div>
+                </div>
+                <span class="text-orange-400 text-sm font-medium" data-lang-key="blenderProgress">70% Progress</span>
+            </div>
+
+            <!-- Highlight 2: C++ -->
+            <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                <h3 class="text-2xl font-semibold text-white mb-4" data-lang-key="cppTitle">C++ Development</h3>
+                <p class="text-gray-300 mb-4" data-lang-key="cppDesc">
+                    Building foundational knowledge and practical experience in C++ programming.
+                </p>
+                <div class="w-full bg-gray-700 rounded-full h-4 mb-2">
+                    <div class="bg-blue-500 h-4 rounded-full" style="width: 50%;"></div>
+                </div>
+                <span class="text-blue-400 text-sm font-medium" data-lang-key="cppProgress">50% Progress</span>
+            </div>
+
+            <!-- Highlight 3: Overall CG -->
+            <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                <h3 class="text-2xl font-semibold text-white mb-4" data-lang-key="cgTitle">Overall Computer Graphics</h3>
+                <p class="text-gray-300 mb-4" data-lang-key="cgDesc">
+                    Advancing comprehensive understanding and application in the field of Computer Graphics.
+                </p>
+                <div class="w-full bg-gray-700 rounded-full h-4 mb-2">
+                    <div class="bg-green-500 h-4 rounded-full" style="width: 90%;"></div>
+                </div>
+                <span class="text-green-400 text-sm font-medium" data-lang-key="cgProgress">90% Progress</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects" class="py-20 px-6 bg-gray-800">
+    <div class="container mx-auto max-w-6xl">
+        <h2 class="text-4xl font-bold text-center text-blue-400 mb-12" data-lang-key="projectsTitle">My Projects</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            <!-- Project Card 1 -->
+<!--            <div class="bg-gray-900 rounded-xl shadow-lg overflow-hidden border border-gray-700 transform hover:scale-105 transition duration-300">-->
+<!--                <img src="https://placehold.co/600x400/2d3748/ffffff?text=Project+1+Image" alt="Project 1" class="w-full h-48 object-cover">-->
+<!--                <div class="p-6">-->
+<!--                    <h3 class="text-2xl font-semibold text-white mb-3" data-lang-key="project1Title">E-commerce Platform</h3>-->
+<!--                    <p class="text-gray-300 mb-4" data-lang-key="project1Desc">A full-stack e-commerce solution with user authentication, product listings, and a secure checkout process.</p>-->
+<!--                    <a href="#" class="text-blue-400 hover:underline text-lg font-medium" data-lang-key="viewProject">View Project &rarr;</a>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="bg-gray-900 rounded-xl shadow-lg overflow-hidden border border-gray-700 transform hover:scale-105 transition duration-300 relative group">
+                <div class="carousel-container w-full h-48 overflow-hidden relative">
+                    <div class="carousel-track flex transition-transform duration-500 ease-in-out">
+                        <img src="ProjetoSalaExamee/SALA1.jpg" alt="Project 1 Image A" class="w-full h-48 object-cover flex-shrink-0 project-image">
+                        <img src="ProjetoSalaExamee/SALA2.jpg" alt="Project 1 Image B" class="w-full h-48 object-cover flex-shrink-0 project-image">
+                        <img src="ProjetoSalaExamee/SALA3.jpg" alt="Project 1 Image C" class="w-full h-48 object-cover flex-shrink-0 project-image">
+                        <img src="ProjetoSalaExamee/SALA4.jpg" alt="Project 1 Image C" class="w-full h-48 object-cover flex-shrink-0 project-image">
+                        <img src="ProjetoSalaExamee/MeuObjeto.jpg" alt="Project 1 Image C" class="w-full h-48 object-cover flex-shrink-0 project-image">
+                    </div>
+                    <button class="carousel-prev absolute left-0 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r-lg z-20 hidden group-hover:block"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-next absolute right-0 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l-lg z-20 hidden group-hover:block"><i class="fas fa-chevron-right"></i></button>
+                    <div class="carousel-dots absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2 z-20"></div>
+                </div>
+
+                <div class="p-6">
+                    <h3 class="text-2xl font-semibold text-white mb-3" data-lang-key="project1Title">Class Room</h3>
+                    <p class="text-gray-300 mb-4" data-lang-key="project1Desc">Computer room in a 6m x 4m children's space, which helps in practical activities and in the teaching and learning process.</p>
+<!--                    <a href="#" class="text-blue-400 hover:underline text-lg font-medium" data-lang-key="viewProject">View Project &rarr;</a>-->
+                </div>
+
+                <div class="project-maximizer absolute inset-0 bg-gray-900 bg-opacity-95 flex items-center justify-center p-4 opacity-0 invisible transition-opacity duration-300 z-30"></div>
+            </div>
+
+            <!-- Project Card 3 -->
+            <div class="bg-gray-900 rounded-xl shadow-lg overflow-hidden border border-gray-700 transform hover:scale-105 transition duration-300">
+                <img src="OtherProjects/MiniCity1.png" alt="Project 3" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-semibold text-white mb-3" data-lang-key="project3Title">Mini City</h3>
+                    <p class="text-gray-300 mb-4" data-lang-key="project3Desc">An illustration of a small city made in Blender. Colorful and bright in the night.</p>
+<!--                    <a href="#" class="text-blue-400 hover:underline text-lg font-medium" data-lang-key="viewProject">View Project &rarr;</a>-->
+                </div>
+            </div>
+
+            <!-- Project Card 4 -->
+            <div class="bg-gray-900 rounded-xl shadow-lg overflow-hidden border border-gray-700 transform hover:scale-105 transition duration-300">
+                <img src="OtherProjects/MyRoomISO.png" alt="Project 4" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-semibold text-white mb-3" data-lang-key="project4Title">Isometric Room</h3>
+                    <p class="text-gray-300 mb-4" data-lang-key="project4Desc">An illustration of my personal space made in blender. Every object is handmade and personally detailed.</p>
+<!--                    <a href="#" class="text-blue-400 hover:underline text-lg font-medium" data-lang-key="viewProject">View Project &rarr;</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer Section -->
+<footer id="contact" class="bg-gray-800 py-12 px-6 rounded-t-lg">
+    <div class="container mx-auto text-center">
+        <h2 class="text-3xl font-bold text-white mb-6" data-lang-key="footerTitle">Get In Touch!</h2>
+        <p class="text-gray-300 text-lg mb-8" data-lang-key="footerSubtitle">Feel free to reach out if you have a project in mind or just want to chat.</p>
+
+        <div class="flex flex-col items-center space-y-4 md:space-y-0 md:flex-row md:justify-center md:space-x-12 mb-10">
+            <div class="flex items-center text-gray-300 hover:text-blue-400 transition duration-300">
+                <i class="fas fa-envelope text-2xl mr-3"></i>
+                <a href="mailto:sheltonmatola2015@gmail.com.com" class="text-lg">sheltonmatola2015@gmail.com</a>
+            </div>
+            <div class="flex items-center text-gray-300 hover:text-blue-400 transition duration-300">
+                <i class="fas fa-phone-alt text-2xl mr-3"></i>
+                <span class="text-lg">+258 85 010 2650</span>
+            </div>
+            <div class="flex items-center text-gray-300 hover:text-blue-400 transition duration-300">
+                <i class="fas fa-map-marker-alt text-2xl mr-3"></i>
+                <span class="text-lg" data-lang-key="footerLocation">Maputo, Mozambique</span>
+            </div>
+        </div>
+
+        <div class="flex justify-center space-x-6 mb-10">
+            <a href="https://www.linkedin.com/in/yourprofile" target="_blank" class="text-gray-300 hover:text-blue-400 transition duration-300 transform hover:scale-110">
+                <i class="fab fa-linkedin-in text-3xl"></i>
+            </a>
+            <a href="https://github.com/yourprofile" target="_blank" class="text-gray-300 hover:text-blue-400 transition duration-300 transform hover:scale-110">
+                <i class="fab fa-github text-3xl"></i>
+            </a>
+            <a href="https://twitter.com/yourprofile" target="_blank" class="text-gray-300 hover:text-blue-400 transition duration-300 transform hover:scale-110">
+                <i class="fab fa-twitter text-3xl"></i>
+            </a>
+            <a href="https://www.instagram.com/yourprofile" target="_blank" class="text-gray-300 hover:text-blue-400 transition duration-300 transform hover:scale-110">
+                <i class="fab fa-instagram text-3xl"></i>
+            </a>
+        </div>
+
+        <p class="text-gray-500 text-sm" data-lang-key="footerCopyright">&copy; 2025 SheltonMatola. All rights reserved. Built with <span class="text-red-500">&hearts;</span> by Shelton.</p>
+    </div>
+</footer>
+
+<!-- Back to Top Button -->
+<button id="back-to-top" class="fixed bottom-8 right-8 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition-all duration-300 ease-in-out opacity-0 translate-y-4 pointer-events-none">
+    <i class="fas fa-arrow-up text-xl"></i>
+</button>
+
+<script>
+    // Define translations for different languages
+    const translations = {
+        en: {
+            navHome: "Home",
+            navAbout: "About",
+            navHighlights: "Highlights",
+            navProjects: "Projects",
+            navContact: "Contact",
+            heroTitle: "Hey there! I'm <span class='text-blue-400'>Shelton</span>.",
+            heroSubtitle: "Computer Science student. Aspiring developer and professional & computer technician. Always learning by observing and experimenting. Because it is easier to learn by practical methods.",
+            heroButton: "See My Work",
+            aboutTitle: "About Computer Graphics",
+            aboutP1: "It would be relatively understandable and easy to learn. I had some difficulties regarding the topic of programming\n" +
+                "                    in the C++ language, but nothing that could not be overcome with the help of the programming and search engines.",
+            aboutP2: "I'm happy to have learned Blender, it was a very interesting and innovative concept.\n" +
+                "                    The modeling of 3D objects, application of colors and textures..\n" +
+                "                    In a way, a different way of making use of computational resources.",
+            aboutP3: "Some group and individual work were carried out, both related to the two major topics in the CG course.\n" +
+                "                    From the works, more specifically, creation of city in blender, rooms, complementary objects,\n" +
+                "                    creation of universes and geometric shapes (in C++).",
+            highlightsTitle: "My Progress & Highlights",
+            blenderTitle: "Blender Proficiency",
+            blenderDesc: "Developing skills in 3D modeling, animation, and rendering using Blender.",
+            blenderProgress: "70% Progress",
+            cppTitle: "C++ Development",
+            cppDesc: "Building foundational knowledge and practical experience in C++ programming.",
+            cppProgress: "50% Progress",
+            cgTitle: "Overall Computer Graphics",
+            cgDesc: "Advancing comprehensive understanding and application in the field of Computer Graphics.",
+            cgProgress: "90% Progress",
+            projectsTitle: "My Projects",
+            project1Title: "Class Room",
+            project1Desc: "Computer room in a 6m x 4m children's space, which helps in practical activities and in the teaching and learning process.",
+            project2Title: "Task Management App",
+            project2Desc: "A responsive task manager with drag-and-drop functionality and real-time updates.",
+            project3Title: "Mini City",
+            project3Desc: "An illustration of a small city made in Blender. Colorful and bright in the night.",
+            project4Title: "Isometric Room",
+            project4Desc: "An illustration of my personal space made in blender. Every object is handmade and personally detailed.",
+            project5Title: "Recipe Finder App",
+            project5Desc: "A simple web app to search for recipes based on ingredients, with a clean interface.",
+            project6Title: "Portfolio Website (This One!)",
+            project6Desc: "A dynamic and responsive personal portfolio website built from scratch.",
+            viewProject: "View Project &rarr;",
+            footerTitle: "Get In Touch!",
+            footerSubtitle: "Feel free to reach out if you have a project in mind or just want to chat.",
+            footerLocation: "Maputo, Mozambique",
+            footerCopyright: "&copy; 2025 SheltonMatola. All rights reserved. Built with <span class='text-red-500'>&hearts;</span> by Shelton."
+        },
+        pt: {
+            navHome: "Início",
+            navAbout: "Sobre",
+            navHighlights: "Destaques",
+            navProjects: "Projetos",
+            navContact: "Contato",
+            heroTitle: "Olá! Eu sou <span class='text-blue-400'>Shelton</span>.",
+            heroSubtitle: "Estudante de Ciência dos Computadores.\n" +
+                "Aspirante à desenvolvedor e profissional & técnico informático.\n" +
+                "Aprendendo sempre observando e experimentando. Pois é mais fácil aprender por métodos práticos.\n",
+            heroButton: "Ver Meus Trabalhos",
+            aboutTitle: "Sobre Computação Gráfica",
+            aboutP1: "Diria relativamente compreensível e fácil de aprender.\n" +
+                "       Obtive algumas dificuldades com relação ao tópico de programação na linguagem C++, mas nada que não se pudesse superar com ajuda dos “engines” de programação e pesquisa.\n",
+            aboutP2: "Estou feliz de ter aprendido Blender, foi um conceito bem interessante e inovador. A modelagem de objetos 3D, aplicação de cores e texturas.. de certa forma, uma forma diferente de fazer uso dos recursos computacionais.\n",
+            aboutP3: "Foram realizados alguns trabalhos em grupo, assim como individuais, ambos relacionados aos dois tópicos maioritários na cadeira de CG. \n" +
+                "       Dos trabalhos, mais especificamente, criação de cidade no blender, quartos, objetos complementares, criação de universos e de formas geométricas (em C++).\n",
+            highlightsTitle: "Meu Progresso e Destaques",
+            blenderTitle: "Proficiência em Blender",
+            blenderDesc: "Desenvolvendo habilidades em modelagem 3D, animação e renderização usando Blender.",
+            blenderProgress: "70% Progresso",
+            cppTitle: "Desenvolvimento C++",
+            cppDesc: "Construindo conhecimento fundamental e experiência prática em programação C++.",
+            cppProgress: "50% Progresso",
+            cgTitle: "Gráficos Computacionais Gerais",
+            cgDesc: "Avançando na compreensão abrangente e aplicação no campo de Gráficos Computacionais.",
+            cgProgress: "90% Progresso",
+            projectsTitle: "Meus Projetos",
+            project1Title: "Sala de Classes",
+            project1Desc: "Sala de informatica num espaço infantil 6m x 4m, que auxilie nas actividades praticas e no processo de ensino e aprendizagem.",
+            project2Title: "Aplicativo de Gerenciamento de Tarefas",
+            project2Desc: "Um gerenciador de tarefas responsivo com funcionalidade de arrastar e soltar e atualizações em tempo real.",
+            project3Title: "Mini Cidade",
+            project3Desc: "Uma ilustração de uma pequena cidade feita no Blender. Colorido e brilhante na noite.",
+            project4Title: "Sala Isometrico",
+            project4Desc: "Uma ilustração do meu espaço pessoal feito no Blender. Cada objeto é feito à mão e pessoalmente detalhado.",
+            project5Title: "Aplicativo de Busca de Receitas",
+            project5Desc: "Um aplicativo web simples para pesquisar receitas com base em ingredientes, com uma interface limpa.",
+            project6Title: "Site de Portfólio (Este Aqui!)",
+            project6Desc: "Um site de portfólio pessoal dinâmico e responsivo construído do zero.",
+            viewProject: "Ver Projeto &rarr;",
+            footerTitle: "Entre em Contato!",
+            footerSubtitle: "Sinta-se à vontade para entrar em contato se tiver um projeto em mente ou apenas quiser conversar.",
+            footerLocation: "Maputo, Moçambique",
+            footerCopyright: "&copy; 2025 SheltonMatola. Todos os direitos reservados. Construído com <span class='text-red-500'>&hearts;</span> por Shelton."
+        }
+    };
+
+    // Function to update content based on language
+    function updateContent(lang) {
+        document.querySelectorAll('[data-lang-key]').forEach(element => {
+            const key = element.getAttribute('data-lang-key');
+            if (translations[lang] && translations[lang][key]) {
+                element.innerHTML = translations[lang][key];
+            }
+        });
+        // Update document title
+        document.title = lang === 'en' ? "Kevin's Portfolio" : "Portfólio de Kevin";
+    }
+
+    // Language button event listeners
+    document.getElementById('lang-en').addEventListener('click', () => {
+        updateContent('en');
+        localStorage.setItem('selectedLang', 'en');
+    });
+
+    document.getElementById('lang-pt').addEventListener('click', () => {
+        updateContent('pt');
+        localStorage.setItem('selectedLang', 'pt');
+    });
+
+    // Load language preference from local storage or default to English on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('selectedLang') || 'en';
+        updateContent(savedLang);
+
+        // Navbar show/hide on scroll
+        const header = document.getElementById('main-header');
+        let lastScrollY = window.scrollY;
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > lastScrollY && window.scrollY > header.offsetHeight) {
+                // Scrolling down and past header height
+                header.classList.remove('header-visible');
+                header.classList.add('header-hidden');
+            } else if (window.scrollY < lastScrollY) {
+                // Scrolling up
+                header.classList.remove('header-hidden');
+                header.classList.add('header-visible');
+            }
+            lastScrollY = window.scrollY;
+
+            // Show/hide back to top button
+            const backToTopButton = document.getElementById('back-to-top');
+            if (window.scrollY > 300) { // Show button after scrolling 300px down
+                backToTopButton.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                backToTopButton.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                backToTopButton.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+            }
+        });
+
+        // Back to top button click functionality
+        document.getElementById('back-to-top').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        //######################################################################
+        document.addEventListener('DOMContentLoaded', () => {
+            // ... (Your existing DOMContentLoaded code) ...
+
+            // Project Card 1 Carousel Logic
+            const projectCard1 = document.querySelector('#projects .grid > div:first-child'); // Selects the first project card
+            if (projectCard1) {
+                const carouselTrack = projectCard1.querySelector('.carousel-track');
+                const images = projectCard1.querySelectorAll('.project-image');
+                const prevButton = projectCard1.querySelector('.carousel-prev');
+                const nextButton = projectCard1.querySelector('.carousel-next');
+                const dotsContainer = projectCard1.querySelector('.carousel-dots');
+                const maximizerOverlay = projectCard1.querySelector('.project-maximizer');
+
+                let currentIndex = 0;
+                const totalImages = images.length;
+
+                if (totalImages > 1) { // Only enable carousel if there's more than one image
+                    // Create dots for navigation
+                    for (let i = 0; i < totalImages; i++) {
+                        const dot = document.createElement('span');
+                        dot.classList.add('dot');
+                        if (i === 0) dot.classList.add('active');
+                        dot.addEventListener('click', () => moveToSlide(i));
+                        dotsContainer.appendChild(dot);
+                    }
+                    const dots = dotsContainer.querySelectorAll('.dot');
+
+                    function moveToSlide(index) {
+                        currentIndex = (index + totalImages) % totalImages; // Ensure index wraps around
+                        const offset = -currentIndex * 100; // Move by 100% of card width
+                        carouselTrack.style.transform = `translateX(${offset}%)`;
+
+                        // Update active dot
+                        dots.forEach((dot, i) => {
+                            if (i === currentIndex) {
+                                dot.classList.add('active');
+                            } else {
+                                dot.classList.remove('active');
+                            }
+                        });
+                    }
+
+                    prevButton.addEventListener('click', () => moveToSlide(currentIndex - 1));
+                    nextButton.addEventListener('click', () => moveToSlide(currentIndex + 1));
+                } else {
+                    // If only one image, hide nav buttons and dots
+                    if (prevButton) prevButton.style.display = 'none';
+                    if (nextButton) nextButton.style.display = 'none';
+                    if (dotsContainer) dotsContainer.style.display = 'none';
+                }
+
+                // Hover to Maximize Logic
+                projectCard1.addEventListener('mouseenter', () => {
+                    // Clone the *current* image in the carousel
+                    const currentImage = images[currentIndex];
+                    if (currentImage) {
+                        const clonedImage = currentImage.cloneNode(true);
+                        clonedImage.classList.remove('w-full', 'h-48', 'object-cover', 'flex-shrink-0'); // Remove carousel specific styles
+                        clonedImage.classList.add('max-w-full', 'max-h-full'); // Add maximizing styles
+                        maximizerOverlay.innerHTML = ''; // Clear previous content
+                        maximizerOverlay.appendChild(clonedImage);
+                    }
+                });
+
+                projectCard1.addEventListener('mouseleave', () => {
+                    maximizerOverlay.innerHTML = ''; // Clear the maximized image when mouse leaves
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
